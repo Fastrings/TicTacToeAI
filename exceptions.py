@@ -33,4 +33,4 @@ class NotANumberException(Exception):
         self.coord = coord
     
     def __str__(self):
-        return f'This coordinate ({self.coord}) is not a number.'
+        return f'This coordinate ({self.coord}) is not a number. Try again!'

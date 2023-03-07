@@ -1,6 +1,8 @@
 import random
 import utils
 import copy
+import exceptions
+import sys
 
 BOARD_HEIGHT = 3
 BOARD_WIDTH = 3
@@ -60,7 +62,7 @@ def get_winning_move(board, current_player):
 def random_ai(board, current_player):
     #look at board
     #get all legal moves
-    #return on at random
+    #return one at random
     return get_random_move(board)
 
 def finds_winning_move_ai(board, current_player):
@@ -89,7 +91,25 @@ def finds_winning_and_losing_moves_ai(board, current_player):
     return get_random_move(board)
 
 def human_player(board, current_player):
-    x = input(f"What is your move's X coordinate ? (input number between 1 and {BOARD_HEIGHT})")
-    y = input(f"What is your move's Y coordinate ? (input number between 1 and {BOARD_WIDTH})")
+
+    try:
+        x = input(f"What is your move's X coordinate ? (input number between 0 and {BOARD_HEIGHT - 1})")
+        y = input(f"What is your move's Y coordinate ? (input number between 0 and {BOARD_WIDTH - 1})")
+    except KeyboardInterrupt:
+        print('')
+        print("----------------------------------------")
+        print("Exiting... Bye!")
+        print("----------------------------------------")
+        sys.exit(0)
+
+    try:
+        x = int(x)
+    except ValueError as e:
+        raise exceptions.NotANumberException(x)
     
-    return (int(x), int(y))
+    try:
+        y = int(y)
+    except ValueError as e:
+        raise exceptions.NotANumberException(y)
+    
+    return (x, y)

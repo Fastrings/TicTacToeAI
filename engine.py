@@ -39,18 +39,6 @@ def render(board, output=True):
     if not output:
         return ret
 
-def get_move():
-    """
-    This function is used to get player input. It takes in 0 arguments and
-    returns a 2-element tuple representing the X and Y coordinates of the 
-    player's move on the board.
-    """
-
-    x = input(f"What is your move's X coordinate ? (input number between 1 and {BOARD_HEIGHT})")
-    y = input(f"What is your move's Y coordinate ? (input number between 1 and {BOARD_WIDTH})")
-    
-    return (x, y)
-
 def make_move(board, coords, player):
     """
     This function is used to make a move on the board. It takes in 3
@@ -59,14 +47,7 @@ def make_move(board, coords, player):
     exception accordignly. If the move is legal the function returns a 
     new board with the move made.
     """
-    if type(coords[0]) == str:
-        if coords[0].isdigit() == False:
-            raise NotANumberException(coords[0])
-        if coords[1].isdigit() == False:
-            raise NotANumberException(coords[1])
-        x, y = int(coords[0]) - 1, int(coords[1]) - 1
-    else:
-        x, y = coords[0], coords[1]
+    x, y = coords[0], coords[1]
 
     if x >= BOARD_HEIGHT or y >= BOARD_WIDTH:
         raise OutOfBoardException(x, y)
@@ -145,13 +126,20 @@ def play(player1_algo, player2_algo):
         current_player_symbol, current_player_algo = players[turn % 2]
         render(board)
         print("----------------------------------------")
-        move_coords = current_player_algo(board, current_player_symbol)
+        try:
+            move_coords = current_player_algo(board, current_player_symbol)
+        except NotANumberException as ex:
+            print(ex.__str__())
+            continue
         try:
             board = make_move(board, move_coords, current_player_symbol)
         except OutOfBoardException as ex:
             print(ex.__str__())
             continue
         except NotEmptySpaceException as ex:
+            print(ex.__str__())
+            continue
+        except NotANumberException as ex:
             print(ex.__str__())
             continue
 
