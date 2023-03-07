@@ -1,18 +1,9 @@
 from exceptions import OutOfBoardException, NotEmptySpaceException, NotAPlayerException, NotANumberException
 from copy import deepcopy
-import simple_AIs
 
 BOARD_HEIGHT = 3
 BOARD_WIDTH = 3
 PLAYERS = ['X', 'O']
-
-CORRESPONDANCE_TABLE = {
-    'random': simple_AIs.random_ai,
-    'get_winning': simple_AIs.finds_winning_move_ai,
-    'get_winning_and_losing': simple_AIs.finds_winning_and_losing_moves_ai,
-    'human': simple_AIs.human_player
-    #'minimax': ???
-}
 
 def new_board():
     """
@@ -139,15 +130,15 @@ def check_board_full(board):
                 return False
     return True
 
-def play(player1_algo_name, player2_algo_name):
+def play(player1_algo, player2_algo):
     """
     The main engine function that runs the game.
     """
     turn = 0
     board = new_board()
     players = [
-        (PLAYERS[0], CORRESPONDANCE_TABLE[player1_algo_name]),
-        (PLAYERS[1], CORRESPONDANCE_TABLE[player2_algo_name]),
+        (PLAYERS[0], player1_algo),
+        (PLAYERS[1], player2_algo),
     ]
 
     while True:
