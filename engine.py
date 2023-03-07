@@ -1,9 +1,18 @@
 from exceptions import OutOfBoardException, NotEmptySpaceException, NotAPlayerException, NotANumberException
 from copy import deepcopy
+import simple_AIs
 
 BOARD_HEIGHT = 3
 BOARD_WIDTH = 3
 PLAYERS = ['X', 'O']
+
+CORRESPONDANCE_TABLE = {
+    'random': simple_AIs.random_ai,
+    'get_winning': simple_AIs.finds_winning_move_ai,
+    'get_winning_and_losing': simple_AIs.finds_winning_and_losing_moves_ai,
+    'human': simple_AIs.human_player
+    #'minimax': ???
+}
 
 def new_board():
     """
@@ -59,12 +68,14 @@ def make_move(board, coords, player):
     exception accordignly. If the move is legal the function returns a 
     new board with the move made.
     """
-    if coords[0].isdigit() == False:
-        raise NotANumberException(coords[0])
-    if coords[1].isdigit() == False:
-        raise NotANumberException(coords[1])
-
-    x, y = int(coords[0]) - 1, int(coords[1]) - 1
+    if type(coords[0]) == str:
+        if coords[0].isdigit() == False:
+            raise NotANumberException(coords[0])
+        if coords[1].isdigit() == False:
+            raise NotANumberException(coords[1])
+        x, y = int(coords[0]) - 1, int(coords[1]) - 1
+    else:
+        x, y = coords[0], coords[1]
 
     if x >= BOARD_HEIGHT or y >= BOARD_WIDTH:
         raise OutOfBoardException(x, y)
@@ -128,32 +139,40 @@ def check_board_full(board):
                 return False
     return True
 
-def play():
+def play(player1_algo_name, player2_algo_name):
     """
     The main engine function that runs the game.
     """
     turn = 0
     board = new_board()
+    players = [
+        (PLAYERS[0], CORRESPONDANCE_TABLE[player1_algo_name]),
+        (PLAYERS[1], CORRESPONDANCE_TABLE[player2_algo_name]),
+    ]
 
     while True:
-        current_player = PLAYERS[turn % 2]
+        current_player_symbol, current_player_algo = players[turn % 2]
         render(board)
-        move_coords = get_move()
+        print("----------------------------------------")
+        move_coords = current_player_algo(board, current_player_symbol)
         try:
-            board = make_move(board, move_coords, current_player)
+            board = make_move(board, move_coords, current_player_symbol)
         except OutOfBoardException as ex:
             print(ex.__str__())
             continue
         except NotEmptySpaceException as ex:
             print(ex.__str__())
             continue
+
         winner = get_winner(board)
 
         if winner is not None:
+            render(board)
             print(f'WINNER IS {winner}!!!!!')
             break
 
         if check_board_full(board):
+            render(board)
             print("IT'S A DRAW!!!!!")
             break
 
