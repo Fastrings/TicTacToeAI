@@ -111,7 +111,7 @@ def check_board_full(board):
                 return False
     return True
 
-def play(player1_algo, player2_algo):
+def play(player1_algo, player2_algo, silent=True):
     """
     The main engine function that runs the game.
     """
@@ -124,8 +124,9 @@ def play(player1_algo, player2_algo):
 
     while True:
         current_player_symbol, current_player_algo = players[turn % 2]
-        render(board)
-        print("----------------------------------------")
+        render(board, output=silent)
+        if silent:
+            print("----------------------------------------")
         try:
             move_coords = current_player_algo(board, current_player_symbol)
         except NotANumberException as ex:
@@ -146,13 +147,36 @@ def play(player1_algo, player2_algo):
         winner = get_winner(board)
 
         if winner is not None:
-            render(board)
+            render(board, output=silent)
+            if silent:
+                print("----------------------------------------")
             print(f'WINNER IS {winner}!!!!!')
-            break
+            return winner
 
         if check_board_full(board):
-            render(board)
+            render(board, output=silent)
+            if silent:
+                print("----------------------------------------")
             print("IT'S A DRAW!!!!!")
-            break
+            return 'D'
 
         turn += 1
+
+def repeated_battles(ai1, ai2, num):
+    """
+    This function is used to calculate statistics by plotting AIs against 
+    each other any number num of times
+    """
+
+    cpt1, cpt2, cptD = 0, 0, 0
+
+    for _ in range(num):
+        result = play(ai1, ai2, silent=False)
+        if result == PLAYERS[0]:
+            cpt1 += 1
+        elif result == PLAYERS[1]:
+            cpt2 += 1
+        else:
+            cptD += 1
+    
+    return [cpt1, cpt2, cptD]
