@@ -124,7 +124,8 @@ def play(player1_algo, player2_algo, silent=True):
 
     while True:
         current_player_symbol, current_player_algo = players[turn % 2]
-        render(board, output=silent)
+        if turn != 0:
+            render(board, output=silent)
         if silent:
             print("----------------------------------------")
         try:

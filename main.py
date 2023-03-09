@@ -2,6 +2,7 @@ import sys
 import engine
 import simple_AIs
 import minimax
+import minimax2
 
 CORRESPONDANCE_TABLE = {
     'random': simple_AIs.random_ai,
@@ -9,6 +10,7 @@ CORRESPONDANCE_TABLE = {
     'get_winning_and_losing': simple_AIs.finds_winning_and_losing_moves_ai,
     'human': simple_AIs.human_player,
     'minimax': minimax.minimax_ai,
+    'minimax2': minimax2.minimax_ai,
 }
 
 
@@ -24,5 +26,8 @@ if __name__ == "__main__":
 
     player1_algo = CORRESPONDANCE_TABLE[sys.argv[1]]
     player2_algo = CORRESPONDANCE_TABLE[sys.argv[2]]
+
+    if sys.argv[2] == "better_minimax":
+        player1_algo, player2_algo = player2_algo, player1_algo
 
     result = engine.play(player1_algo, player2_algo)
