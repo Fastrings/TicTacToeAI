@@ -15,16 +15,30 @@ CORRESPONDANCE_TABLE = {
 
 
 if __name__ == "__main__":
-    if sys.argv[1] == 'battles':
-        num = int(sys.argv[2])
-        player1_algo = CORRESPONDANCE_TABLE[sys.argv[3]]
-        player2_algo = CORRESPONDANCE_TABLE[sys.argv[4]]
+    try:
+        if sys.argv[1] and sys.argv[1] == 'battles':
+            num = int(sys.argv[2])
+            player1_algo = CORRESPONDANCE_TABLE[sys.argv[3]]
+            player2_algo = CORRESPONDANCE_TABLE[sys.argv[4]]
 
-        tally = engine.repeated_battles(player1_algo, player2_algo, num)
-        print(f'{num} battles done.\nResults: {sys.argv[3]} won {tally[0]} battles, {sys.argv[4]} won {tally[1]} battles, {tally[2]} battle(s) was(ere) drawn.')
-        sys.exit(0)
+            tally = engine.repeated_battles(player1_algo, player2_algo, num)
+            print(f'{num} battles done.\nResults: {sys.argv[3]} won {tally[0]} battles, {sys.argv[4]} won {tally[1]} battles, {tally[2]} battle(s) was(ere) drawn.')
+            sys.exit(0)
+    except IndexError as ex:
+        pass
 
-    player1_algo = CORRESPONDANCE_TABLE[sys.argv[1]]
-    player2_algo = CORRESPONDANCE_TABLE[sys.argv[2]]
+    while True:
+        inp = "Which AI do you want to battle today:\n"
+        for algo in CORRESPONDANCE_TABLE.keys():
+                inp += "---> "
+                inp += algo
+                inp += "\n"
 
-    result = engine.play(player1_algo, player2_algo)
+        x = input(inp)
+        if x not in CORRESPONDANCE_TABLE:
+            print("Unknown AI. Please try again.")
+        else:            
+            ai = CORRESPONDANCE_TABLE[x]
+            break
+
+    result = engine.play(ai, simple_AIs.human_player)
