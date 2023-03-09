@@ -4,6 +4,9 @@ import copy
 import simple_AIs
 from math import inf as infinity
 
+
+cache = {}
+
 def minimax_ai(board, current_player):
     
     if len(utils.get_all_legal_moves(board)) == 9:
@@ -36,23 +39,27 @@ def minimax(board, depth, isMax):
     elif engine.check_board_full(board):
         return 0
     
-    if isMax:
-        best = -infinity
-        for i in range(engine.BOARD_HEIGHT):
-            for j in range(engine.BOARD_WIDTH):
-                if board[i][j] is None:
-                    new_board = copy.deepcopy(board)
-                    new_board = engine.make_move(new_board, (i, j), engine.PLAYERS[0])
+    cache_key = str(board)
+    if cache_key not in cache:
+        if isMax:
+            best = -infinity
+            for i in range(engine.BOARD_HEIGHT):
+                for j in range(engine.BOARD_WIDTH):
+                    if board[i][j] is None:
+                        new_board = copy.deepcopy(board)
+                        new_board = engine.make_move(new_board, (i, j), engine.PLAYERS[0])
 
-                    best = max(best, minimax(new_board, depth + 1, not isMax))
-        return best
-    else:
-        best = infinity
-        for i in range(engine.BOARD_HEIGHT):
-            for j in range(engine.BOARD_WIDTH):
-                if board[i][j] is None:
-                    new_board = copy.deepcopy(board)
-                    new_board = engine.make_move(new_board, (i, j), engine.PLAYERS[1])
+                        best = max(best, minimax(new_board, depth + 1, not isMax))
+            cache[cache_key] = best
+        else:
+            best = infinity
+            for i in range(engine.BOARD_HEIGHT):
+                for j in range(engine.BOARD_WIDTH):
+                    if board[i][j] is None:
+                        new_board = copy.deepcopy(board)
+                        new_board = engine.make_move(new_board, (i, j), engine.PLAYERS[1])
 
-                    best = min(best, minimax(new_board, depth + 1, not isMax))
-        return best
+                        best = min(best, minimax(new_board, depth + 1, not isMax))
+            cache[cache_key] = best
+    
+    return cache[cache_key]

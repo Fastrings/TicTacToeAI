@@ -27,7 +27,4 @@ if __name__ == "__main__":
     player1_algo = CORRESPONDANCE_TABLE[sys.argv[1]]
     player2_algo = CORRESPONDANCE_TABLE[sys.argv[2]]
 
-    if sys.argv[2] == "better_minimax":
-        player1_algo, player2_algo = player2_algo, player1_algo
-
     result = engine.play(player1_algo, player2_algo)
