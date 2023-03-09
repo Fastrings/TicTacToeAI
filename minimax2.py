@@ -9,22 +9,22 @@ cache = {}
 
 def minimax_ai(board, current_player):
     
-    if len(utils.get_all_legal_moves(board)) == 9:
+    legal_moves = utils.get_all_legal_moves(board)
+    
+    if len(legal_moves) == 9:
         return simple_AIs.get_random_move(board)
     
     bestVal = -infinity
     bestMove = (-1, -1)
 
-    for i in range(engine.BOARD_HEIGHT):
-        for j in range(engine.BOARD_WIDTH):
-            if board[i][j] is None:
-                new_board = copy.deepcopy(board)
-                new_board = engine.make_move(new_board, (i, j), current_player)
-                moveVal = minimax(new_board, 0, False)
+    for move in legal_moves:
+        new_board = copy.deepcopy(board)
+        new_board = engine.make_move(new_board, move, current_player)
+        moveVal = minimax(new_board, 0, False)
 
-                if moveVal > bestVal:
-                    bestMove = (i, j)
-                    bestVal = moveVal
+        if moveVal > bestVal:
+            bestMove = move
+            bestVal = moveVal
 
     return bestMove
 
@@ -41,25 +41,23 @@ def minimax(board, depth, isMax):
     
     cache_key = str(board)
     if cache_key not in cache:
+
+        legal_moves = utils.get_all_legal_moves(board)
         if isMax:
             best = -infinity
-            for i in range(engine.BOARD_HEIGHT):
-                for j in range(engine.BOARD_WIDTH):
-                    if board[i][j] is None:
-                        new_board = copy.deepcopy(board)
-                        new_board = engine.make_move(new_board, (i, j), engine.PLAYERS[0])
+            for move in legal_moves:
+                new_board = copy.deepcopy(board)
+                new_board = engine.make_move(new_board, move, engine.PLAYERS[0])
 
-                        best = max(best, minimax(new_board, depth + 1, not isMax))
+                best = max(best, minimax(new_board, depth + 1, not isMax))
             cache[cache_key] = best
         else:
             best = infinity
-            for i in range(engine.BOARD_HEIGHT):
-                for j in range(engine.BOARD_WIDTH):
-                    if board[i][j] is None:
-                        new_board = copy.deepcopy(board)
-                        new_board = engine.make_move(new_board, (i, j), engine.PLAYERS[1])
+            for move in legal_moves:
+                new_board = copy.deepcopy(board)
+                new_board = engine.make_move(new_board, move, engine.PLAYERS[1])
 
-                        best = min(best, minimax(new_board, depth + 1, not isMax))
+                best = min(best, minimax(new_board, depth + 1, not isMax))
             cache[cache_key] = best
     
     return cache[cache_key]
