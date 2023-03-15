@@ -1,4 +1,5 @@
 **TODO**
 
-- add help arg to main.py
+- Improve user experience
+- Add DB to store results
 - containerize it
