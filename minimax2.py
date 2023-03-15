@@ -4,7 +4,6 @@ import copy
 import simple_AIs
 from math import inf as infinity
 
-
 cache = {}
 
 def minimax_ai(board, current_player):
@@ -20,7 +19,7 @@ def minimax_ai(board, current_player):
     for move in legal_moves:
         new_board = copy.deepcopy(board)
         new_board = engine.make_move(new_board, move, current_player)
-        moveVal = minimax(new_board, 0, False)
+        moveVal = minimax(new_board, 0, False, current_player)
 
         if moveVal > bestVal:
             bestMove = move
@@ -28,13 +27,13 @@ def minimax_ai(board, current_player):
 
     return bestMove
 
-def minimax(board, depth, isMax):
+def minimax(board, depth, isMax, player_to_optimize):
     winner = engine.get_winner(board)
 
     if winner is not None:
-        if winner == engine.PLAYERS[0]:
+        if winner == player_to_optimize:
             return 10 - depth
-        elif winner == engine.PLAYERS[1]:
+        elif winner == utils.get_opponent(player_to_optimize):
             return -10 + depth
     elif engine.check_board_full(board):
         return 0
@@ -47,17 +46,17 @@ def minimax(board, depth, isMax):
             best = -infinity
             for move in legal_moves:
                 new_board = copy.deepcopy(board)
-                new_board = engine.make_move(new_board, move, engine.PLAYERS[0])
+                new_board = engine.make_move(new_board, move, player_to_optimize)
 
-                best = max(best, minimax(new_board, depth + 1, not isMax))
+                best = max(best, minimax(new_board, depth + 1, not isMax, player_to_optimize))
             cache[cache_key] = best
         else:
             best = infinity
             for move in legal_moves:
                 new_board = copy.deepcopy(board)
-                new_board = engine.make_move(new_board, move, engine.PLAYERS[1])
+                new_board = engine.make_move(new_board, move, utils.get_opponent(player_to_optimize))
 
-                best = min(best, minimax(new_board, depth + 1, not isMax))
+                best = min(best, minimax(new_board, depth + 1, not isMax, player_to_optimize))
             cache[cache_key] = best
     
     return cache[cache_key]

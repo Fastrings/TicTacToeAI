@@ -54,6 +54,17 @@ if __name__ == "__main__":
             continue
         else:            
             ai = CORRESPONDANCE_TABLE[x]
+            try:
+                x = input("Do you want to play first?(Y/N)")
+            except KeyboardInterrupt:
+                print('')
+                print("----------------------------------------")
+                print("Exiting... Bye!")
+                print("----------------------------------------")
+                sys.exit(0)
             break
-
-    result = engine.play(ai, simple_AIs.human_player)
+        
+    if x == 'N':
+        result = engine.play(ai, simple_AIs.human_player)
+    else:
+        result = engine.play(simple_AIs.human_player, ai)
