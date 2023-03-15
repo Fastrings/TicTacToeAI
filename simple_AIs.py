@@ -90,6 +90,26 @@ def finds_winning_and_losing_moves_ai(board, current_player):
     #otherwise: return random move
     return get_random_move(board)
 
+def mid_ai(board, current_player):
+    winning_move = get_winning_move(board, current_player)
+    if winning_move is not None:
+        return winning_move
+
+    opponent = utils.get_opponent(current_player)
+    opponent_winning_move = get_winning_move(board, opponent)
+    if opponent_winning_move is not None:
+        return opponent_winning_move
+    
+    if board[1][1] is None:
+        return (1, 1)
+    
+    corners = [(0, 0), (2, 0), (0, 2), (2, 2)]
+    open_corners = [c for c in corners if board[c[0]][c[1]] is None]
+    if open_corners:
+        return random.choice(open_corners)
+    
+    return get_random_move(board)
+
 def human_player(board, current_player):
 
     try:

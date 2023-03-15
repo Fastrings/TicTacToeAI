@@ -12,6 +12,7 @@ CORRESPONDANCE_TABLE = {
     'human': simple_AIs.human_player,
     'minimax': minimax.minimax_ai,
     'minimax2': minimax2.minimax_ai,
+    'mid': simple_AIs.mid_ai,
 }
 
 
@@ -63,7 +64,7 @@ if __name__ == "__main__":
                 print("----------------------------------------")
                 sys.exit(0)
             break
-        
+
     if x == 'N':
         result = engine.play(ai, simple_AIs.human_player)
     else:

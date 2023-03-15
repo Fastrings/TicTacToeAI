@@ -1,4 +1,5 @@
 from exceptions import NotAPlayerException
+from random import shuffle
 
 PLAYERS = ['X', 'O']
 
@@ -8,6 +9,7 @@ def get_all_legal_moves(board):
         for y, val in enumerate(row):
             if val is None:
                 legal_moves.append((x, y))
+    shuffle(legal_moves)
     return legal_moves
 
 def get_opponent(current_player):
