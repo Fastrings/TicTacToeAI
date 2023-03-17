@@ -46,7 +46,16 @@ def repeated_battles(player1, player2, num, save):
                 cur.execute('SELECT id FROM "Robots" WHERE name = %s', (player2_name, ))
                 id2 = cur.fetchone()
 
-                cur.execute('INSERT INTO "results" VALUES (%s, %s, %s, %s)', (id1, id2, None, True))
+                winner = None
+
+                if result == PLAYERS[0]:
+                    winner = id1
+                if result == PLAYERS[1]:
+                    winner = id2
+                
+                draw = True if winner is None else None
+
+                cur.execute('INSERT INTO "results" VALUES (%s, %s, %s, %s)', (id1, id2, winner, draw))
                 cur.close()
             except (Exception, psycopg2.DatabaseError) as err:
                 print(f'--{err}--')
