@@ -1,5 +1,6 @@
 **TODO**
 
-- Improve user experience
-- Add DB to store results
+- DataViz
+- Graphical user interface
 - containerize it
+- host it on aws
