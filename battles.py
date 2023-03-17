@@ -1,5 +1,6 @@
 from engine import PLAYERS, play
 import psycopg2
+from psycopg2.extras import execute_values
 from configparser import ConfigParser
 
 def config(filename='database.ini', section='postgresql'):
@@ -16,6 +17,22 @@ def config(filename='database.ini', section='postgresql'):
     
     return db
 
+def get_player_id(player_name):
+    try:
+        params = config()
+        conn = psycopg2.connect(**params)
+        cur = conn.cursor()
+        cur.execute('SELECT id FROM "Robots" WHERE name = %s', (player_name, ))
+        id = cur.fetchone()
+    except (Exception, psycopg2.DatabaseError) as err:
+        print(f'--{err}--')
+    finally:
+        if conn is not None:
+            conn.commit()
+            conn.close()
+    
+    return id
+
 def repeated_battles(player1, player2, num, save):
     """
     This function is used to calculate statistics by plotting AIs against 
@@ -26,42 +43,42 @@ def repeated_battles(player1, player2, num, save):
     conn = None
     player1_name, player1_algo = player1
     player2_name, player2_algo = player2
+    values = []
+    id1, id2 = None, None
+
+    if save:
+        id1 = get_player_id(player1_name)
+        id2 = get_player_id(player2_name)
 
     for _ in range(num):
         result = play(player1_algo, player2_algo, silent=False)
+        draw, winner = False, None
         if result == PLAYERS[0]:
             cpt1 += 1
+            winner = id1
         elif result == PLAYERS[1]:
             cpt2 += 1
+            winner = id2
         else:
             cptD += 1
-    
+            draw = True
+        
         if save:
-            try:
-                params = config()
-                conn = psycopg2.connect(**params)
-                cur = conn.cursor()
-                cur.execute('SELECT id FROM "Robots" WHERE name = %s', (player1_name, ))
-                id1 = cur.fetchone()
-                cur.execute('SELECT id FROM "Robots" WHERE name = %s', (player2_name, ))
-                id2 = cur.fetchone()
-
-                winner = None
-
-                if result == PLAYERS[0]:
-                    winner = id1
-                if result == PLAYERS[1]:
-                    winner = id2
-                
-                draw = True if winner is None else None
-
-                cur.execute('INSERT INTO "results" VALUES (%s, %s, %s, %s)', (id1, id2, winner, draw))
-                cur.close()
-            except (Exception, psycopg2.DatabaseError) as err:
-                print(f'--{err}--')
-            finally:
-                if conn is not None:
-                    conn.commit()
-                    conn.close()
+            tup = (id1, id2, winner, draw)
+            values.append(tup)
+    
+    if save:
+        try:
+            params = config()
+            conn = psycopg2.connect(**params)
+            cur = conn.cursor()
+            execute_values(cur, 'INSERT INTO "results" VALUES %s', values)
+            cur.close()
+        except (Exception, psycopg2.DatabaseError) as err:
+            print(f'--{err}--')
+        finally:
+            if conn is not None:
+                conn.commit()
+                conn.close()
 
     return [cpt1, cpt2, cptD]
