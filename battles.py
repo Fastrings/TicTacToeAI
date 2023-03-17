@@ -44,11 +44,8 @@ def repeated_battles(player1, player2, num, save):
     player1_name, player1_algo = player1
     player2_name, player2_algo = player2
     values = []
-    id1, id2 = None, None
-
-    if save:
-        id1 = get_player_id(player1_name)
-        id2 = get_player_id(player2_name)
+    id1 = get_player_id(player1_name) if save else None
+    id2 = get_player_id(player2_name) if save else None
 
     for _ in range(num):
         result = play(player1_algo, player2_algo, silent=False)

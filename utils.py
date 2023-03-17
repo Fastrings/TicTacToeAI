@@ -1,5 +1,6 @@
 from exceptions import NotAPlayerException
 from random import shuffle
+import sys
 
 PLAYERS = ['X', 'O']
 
@@ -30,3 +31,15 @@ def print_help(table):
     for algo in table.keys():
         print("---> ", end='')
         print(algo)
+
+def get_input(str):
+    try:
+        x = input(str)
+    except KeyboardInterrupt:
+        print('')
+        print("----------------------------------------")
+        print("Exiting... Bye!")
+        print("----------------------------------------")
+        sys.exit(0)
+    
+    return x

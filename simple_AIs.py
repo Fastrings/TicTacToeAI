@@ -112,24 +112,17 @@ def mid_ai(board, current_player):
 
 def human_player(board, current_player):
 
-    try:
-        x = input(f"What is your move's X coordinate ? (input number between 0 and {BOARD_HEIGHT - 1})")
-        y = input(f"What is your move's Y coordinate ? (input number between 0 and {BOARD_WIDTH - 1})")
-    except KeyboardInterrupt:
-        print('')
-        print("----------------------------------------")
-        print("Exiting... Bye!")
-        print("----------------------------------------")
-        sys.exit(0)
+    x = utils.get_input(f"What is your move's X coordinate ? (input number between 0 and {BOARD_HEIGHT - 1})")
+    y = utils.get_input(f"What is your move's Y coordinate ? (input number between 0 and {BOARD_WIDTH - 1})")
 
     try:
         x = int(x)
-    except ValueError as e:
+    except ValueError:
         raise exceptions.NotANumberException(x)
     
     try:
         y = int(y)
-    except ValueError as e:
+    except ValueError:
         raise exceptions.NotANumberException(y)
     
     return (x, y)

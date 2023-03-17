@@ -43,27 +43,13 @@ if __name__ == "__main__":
                 inp += algo
                 inp += "\n"
 
-        try:
-            x = input(inp)
-        except KeyboardInterrupt:
-            print('')
-            print("----------------------------------------")
-            print("Exiting... Bye!")
-            print("----------------------------------------")
-            sys.exit(0)
+        x = utils.get_input(inp)
         if x not in CORRESPONDANCE_TABLE:
             print("Unknown AI. Please try again.")
             continue
         else:            
             ai = CORRESPONDANCE_TABLE[x]
-            try:
-                x = input("Do you want to play first?(Y/N)")
-            except KeyboardInterrupt:
-                print('')
-                print("----------------------------------------")
-                print("Exiting... Bye!")
-                print("----------------------------------------")
-                sys.exit(0)
+            x = utils.get_input("Do you want to play first?(Y/N)")
             break
 
     if x == 'N':
