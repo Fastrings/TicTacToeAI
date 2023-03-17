@@ -162,22 +162,3 @@ def play(player1_algo, player2_algo, silent=True):
             return 'D'
 
         turn += 1
-
-def repeated_battles(ai1, ai2, num):
-    """
-    This function is used to calculate statistics by plotting AIs against 
-    each other any number num of times
-    """
-
-    cpt1, cpt2, cptD = 0, 0, 0
-
-    for _ in range(num):
-        result = play(ai1, ai2, silent=False)
-        if result == PLAYERS[0]:
-            cpt1 += 1
-        elif result == PLAYERS[1]:
-            cpt2 += 1
-        else:
-            cptD += 1
-    
-    return [cpt1, cpt2, cptD]

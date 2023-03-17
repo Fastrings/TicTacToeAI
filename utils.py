@@ -25,7 +25,7 @@ def print_help(table):
     print("How to use this program?")
     print("- If you want to battle an AI yourself, enter 'main.py' in the terminal and more instructions will be prompted.")
     print("- If you want AIs to battle themselves, enter 'main.py battles ai1 ai2' in the terminal, where ai1 and ai2", end='')
-    print(" are the names of the AIs you want to send to battle.")
+    print(" are the names of the AIs you want to send to battle. Adding 'save' to this command will save the results to the database.")
     print("Here are all the AIs available:")
     for algo in table.keys():
         print("---> ", end='')
