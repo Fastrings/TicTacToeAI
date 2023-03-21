@@ -1,10 +1,8 @@
 import sys
-import engine
-import simple_AIs
-import minimax
-import minimax2
-import utils
-from battles import repeated_battles
+import src.engine as engine
+from src.computers import simple_AIs, minimax, minimax2
+import src.other.utils as utils
+from src.other.battles import repeated_battles
 
 CORRESPONDANCE_TABLE = {
     'random': simple_AIs.random_ai,

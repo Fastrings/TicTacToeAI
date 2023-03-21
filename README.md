@@ -23,5 +23,5 @@ After running the *battles* option a good number of times, we can obtain statist
 our game of TicTacToe. Here are mine, visualized using Microsoft's tool, Power BI.
 
 <p align="center">
-	<img src="Statistics.png"></img>
+	<img src="Images/Statistics.png"></img>
 </p>
