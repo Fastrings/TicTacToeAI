@@ -20,4 +20,6 @@ python main.py battles [num] [ai1] [ai2]
 After running the *battles* option a good number of times, we can obtain statistics on 
 our game of TicTacToe. Here are mine, visualized using Microsoft's tool, Power BI.
 
-[! Alt text](Statistics.png?raw=true "Statistics")
+<p align="center">
+	<img src="Statistics.png"></img>
+</p>
