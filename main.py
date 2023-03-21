@@ -1,7 +1,7 @@
 import sys
 import src.engine as engine
-from src.computers import simple_AIs, minimax, minimax2
 import src.other.utils as utils
+from src.computers import simple_AIs, minimax, minimax2
 from src.other.battles import repeated_battles
 
 CORRESPONDANCE_TABLE = {
