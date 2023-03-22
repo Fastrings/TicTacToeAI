@@ -4,13 +4,13 @@ import sys
 
 PLAYERS = ['X', 'O']
 
-def get_all_legal_moves(board):
+def get_all_legal_moves(board): # get all possible moves in a given board
     legal_moves = []
     for x, row in enumerate(board):
         for y, val in enumerate(row):
-            if val is None:
-                legal_moves.append((x, y))
-    shuffle(legal_moves)
+            if val is None: # if space is empty
+                legal_moves.append((x, y)) # we add the coordinates to the list
+    shuffle(legal_moves) # shuffle the list so that the computers do not always have the same opening move
     return legal_moves
 
 def get_opponent(current_player):

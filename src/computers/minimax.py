@@ -10,19 +10,19 @@ def minimax_ai(board, current_player):
 
     legal_moves = utils.get_all_legal_moves(board)
 
-    for move in legal_moves:
+    for move in legal_moves: # get score for every move
         new_board = copy.deepcopy(board)
         new_board = engine.make_move(new_board, move, current_player)
 
         opponent = utils.get_opponent(current_player)
 
-        score = minimax_score(new_board, opponent, current_player)
+        score = minimax_score(new_board, opponent, current_player) 
 
-        if best_score is None or score > best_score:
+        if best_score is None or score > best_score: # keep the best score
             best_move = move
             best_score = score
     
-    return best_move
+    return best_move # return the move
 
 def minimax_score(board, player_to_move, player_to_optimize):
     """

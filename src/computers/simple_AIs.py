@@ -46,22 +46,21 @@ def get_winner(board):
     return checkDiagonals(board)
 
 def get_random_move(board):
+    #get all legal moves
+    #return one at random
     legal_moves = utils.get_all_legal_moves(board)
     return random.choice(legal_moves)
 
 def get_winning_move(board, current_player):
     legal_moves = utils.get_all_legal_moves(board)
-    for move in legal_moves:
+    for move in legal_moves: # look at all possible moves
         new_board = copy.deepcopy(board)
         new_board[move[0]][move[1]] = current_player
         winner = get_winner(new_board)
-        if winner == current_player:
+        if winner == current_player: # if one allows player to win, return it
             return move
 
 def random_ai(board, current_player):
-    #look at board
-    #get all legal moves
-    #return one at random
     return get_random_move(board)
 
 def finds_winning_move_ai(board, current_player):
@@ -89,25 +88,25 @@ def finds_winning_and_losing_moves_ai(board, current_player):
     #otherwise: return random move
     return get_random_move(board)
 
-def mid_ai(board, current_player):
+def mid_ai(board, current_player): # naive ai that plays somewhat not that bad
     winning_move = get_winning_move(board, current_player)
-    if winning_move is not None:
+    if winning_move is not None: # if a move allows the player to win, return it
         return winning_move
 
     opponent = utils.get_opponent(current_player)
     opponent_winning_move = get_winning_move(board, opponent)
-    if opponent_winning_move is not None:
+    if opponent_winning_move is not None: # if a move stops the opponent from winning, return it
         return opponent_winning_move
     
-    if board[1][1] is None:
+    if board[1][1] is None: # if center point is available, play there
         return (1, 1)
     
     corners = [(0, 0), (2, 0), (0, 2), (2, 2)]
     open_corners = [c for c in corners if board[c[0]][c[1]] is None]
-    if open_corners:
+    if open_corners: # if corners are available, pick one at random
         return random.choice(open_corners)
     
-    return get_random_move(board)
+    return get_random_move(board) # play randomly if above conditions are not met
 
 def human_player(board, current_player):
 

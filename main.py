@@ -35,7 +35,7 @@ if __name__ == "__main__":
         pass
 
     while True:
-        inp = "Which AI do you want to battle today:\n"
+        inp = "Which AI do you want to battle today:\n" # list all available AI opponents
         for algo in CORRESPONDANCE_TABLE.keys():
                 inp += "---> "
                 inp += algo

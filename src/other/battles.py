@@ -5,7 +5,7 @@ from configparser import ConfigParser
 
 def config(filename='database.ini', section='postgresql'):
     parser = ConfigParser()
-    parser.read(filename)
+    parser.read(filename) # read config from filename
 
     db = {}
     if parser.has_section(section):
@@ -15,15 +15,15 @@ def config(filename='database.ini', section='postgresql'):
     else:
         raise Exception(f'Section {section} not found in the {filename} file')
     
-    return db
+    return db # return parsed options
 
-def get_player_id(player_name):
+def get_player_id(player_name): # get player id, an int between 1 and 6 included. Player id 
     try:
         params = config()
         conn = psycopg2.connect(**params)
         cur = conn.cursor()
-        cur.execute('SELECT id FROM "Robots" WHERE name = %s', (player_name, ))
-        id = cur.fetchone()
+        cur.execute('SELECT id FROM "Robots" WHERE name = %s', (player_name, )) # execute query
+        id = cur.fetchone() # fetch result of above query
     except (Exception, psycopg2.DatabaseError) as err:
         print(f'--{err}--')
     finally:
@@ -43,12 +43,12 @@ def repeated_battles(player1, player2, num, save):
     conn = None
     player1_name, player1_algo = player1
     player2_name, player2_algo = player2
-    values = []
+    values = [] # we prepare the values to send to the database
     id1 = get_player_id(player1_name) if save else None
     id2 = get_player_id(player2_name) if save else None
 
-    for _ in range(num):
-        result = play(player1_algo, player2_algo, silent=False)
+    for _ in range(num): # pitch 2 AIs against one another any num number of times
+        result = play(player1_algo, player2_algo, notsilent=False)
         draw, winner = False, None
         if result == PLAYERS[0]:
             cpt1 += 1
@@ -60,16 +60,16 @@ def repeated_battles(player1, player2, num, save):
             cptD += 1
             draw = True
         
-        if save:
+        if save: # if we want to save to the database
             tup = (id1, id2, winner, draw)
-            values.append(tup)
+            values.append(tup) # add current tally to list values to be sent to the database
     
-    if save:
+    if save: # if we want to save to the database
         try:
             params = config()
             conn = psycopg2.connect(**params)
             cur = conn.cursor()
-            execute_values(cur, 'INSERT INTO "results" VALUES %s', values)
+            execute_values(cur, 'INSERT INTO "results" VALUES %s', values) # only 1 call to the database because we prepared the values beforehand
             cur.close()
         except (Exception, psycopg2.DatabaseError) as err:
             print(f'--{err}--')

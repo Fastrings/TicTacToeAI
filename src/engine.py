@@ -1,4 +1,4 @@
-from .other.exceptions import NotANumberException, NotEmptySpaceException, NotAPlayerException, OutOfBoardException
+from src.other.exceptions import NotANumberException, NotEmptySpaceException, NotAPlayerException, OutOfBoardException
 from copy import deepcopy
 
 BOARD_HEIGHT = 3
@@ -111,7 +111,24 @@ def check_board_full(board):
                 return False
     return True
 
-def play(player1_algo, player2_algo, silent=True):
+def game_over(board, notsilent):
+    winner = get_winner(board)
+
+    if winner is not None:
+        render(board, output=notsilent)
+        if notsilent:
+            print("----------------------------------------")
+        print(f'WINNER IS {winner}!!!!!')
+        return winner
+
+    if check_board_full(board):
+        render(board, output=notsilent)
+        if notsilent:
+            print("----------------------------------------")
+        print("IT'S A DRAW!!!!!")
+        return 'D'
+
+def play(player1_algo, player2_algo, notsilent=True):
     """
     The main engine function that runs the game.
     """
@@ -125,40 +142,18 @@ def play(player1_algo, player2_algo, silent=True):
     while True:
         current_player_symbol, current_player_algo = players[turn % 2]
         if turn != 0:
-            render(board, output=silent)
-        if silent:
+            render(board, output=notsilent)
+        if notsilent:
             print("----------------------------------------")
         try:
-            move_coords = current_player_algo(board, current_player_symbol)
-        except NotANumberException as ex:
-            print(ex.__str__())
-            continue
-        try:
-            board = make_move(board, move_coords, current_player_symbol)
-        except OutOfBoardException as ex:
-            print(ex.__str__())
-            continue
-        except NotEmptySpaceException as ex:
-            print(ex.__str__())
-            continue
-        except NotANumberException as ex:
+            move_coords = current_player_algo(board, current_player_symbol) # get the coordinates of the move
+            board = make_move(board, move_coords, current_player_symbol) # make the move
+        except (OutOfBoardException, NotANumberException, NotEmptySpaceException) as ex:
             print(ex.__str__())
             continue
 
-        winner = get_winner(board)
-
-        if winner is not None:
-            render(board, output=silent)
-            if silent:
-                print("----------------------------------------")
-            print(f'WINNER IS {winner}!!!!!')
-            return winner
-
-        if check_board_full(board):
-            render(board, output=silent)
-            if silent:
-                print("----------------------------------------")
-            print("IT'S A DRAW!!!!!")
-            return 'D'
-
+        end = game_over(board, notsilent)
+        if end is not None: # if game is over
+            return end # break the loop and return the winner (or draw)
+        
         turn += 1
