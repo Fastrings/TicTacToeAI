@@ -10,19 +10,27 @@ The other parts (database, data visualization, tests, ...) came from my own imag
 
 ## USAGE
 
-python main.py
+To play against the computer, enter the following command in the terminal :
+```bash
+$ python main.py
+```
 
-&emsp;Play against the computer. More instructions will be prompted on the command line.
+More instructions will be prompted on the command line.
 
-python main.py battles [num] [ai1] [ai2]
+To pit the AIs against one another, enter the following command :
+```bash
+$ python main.py battles [num] [ai1] [ai2]
+```
 
-&emsp;Launch any *num* number of games pitching *ai1* and *ai2* against each other. The AI *ai1* will always play first. Adding save at the end of this line saves the result of the battles to the database.
+This will launch *num* games pitting *ai1* and *ai2* against each other. The AI *ai1* will always play first. Adding save at the end of this line saves the result of the battles to the database.
 
 ## TESTS
 
 If you want to run the test suite, go to the root of the project and enter the following command:
 
-&emsp;python -m pytest tests
+```bash
+$ python -m pytest tests
+```
 
 ## DATABASE
 
