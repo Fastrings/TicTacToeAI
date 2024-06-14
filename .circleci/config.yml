@@ -1,0 +1,17 @@
+version: 2.1
+
+jobs:
+  build_and_test:
+    executor: python/default
+    steps:
+      - checkout
+      - python/install-packages:
+          pkg-manager: pip
+      - run:
+          name: Run tests
+          command: python -m pytest
+
+workflows:
+  test_my_app:
+    jobs:
+      - build_and_test
